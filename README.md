@@ -1,4 +1,8 @@
 # NesTracker
+        _   _   _   _     _   _   _     _   _   _   _   _   _   _    
+       / \ / \ / \ / \   / \ / \ / \   / \ / \ / \ / \ / \ / \ / \ 
+      ( R | u | b | y ) ( N | E | S ) ( T | r | a | c | k | e | r )
+       \_/ \_/ \_/ \_/   \_/ \_/ \_/   \_/ \_/ \_/ \_/ \_/ \_/ \_/
 
 This is an experimental project intended to push the boundaries of what is possible 
 with audio programming in Ruby. 
