@@ -4,6 +4,8 @@ require "wavefile"
 require "byebug"
 require_relative "nes_tracker/version"
 require_relative "nes_tracker/synth_voices/noise"
+require_relative "nes_tracker/synth_voices/pulse"
+require_relative "nes_tracker/utilities/audio_engine"
 
 module NesTracker
   class Error < StandardError; end
@@ -12,6 +14,7 @@ module NesTracker
     def initialize
       @song = Array.new(8) { Array.new(16, '-') }
       @noise = NesTracker::SynthVoices::Noise.new
+      @engine = NesTracker::Utilities::AudioEngine.new
       run
     end
 
@@ -38,6 +41,10 @@ module NesTracker
         end
       end
     end
+
+    private 
+
+    attr_reader :noise, :engine
 
     def print_title
       puts <<-'EOF'
@@ -73,7 +80,8 @@ module NesTracker
     def play_song(bpm = 120)
       bpm = bpm.to_f
       puts "Playing song at #{bpm} BPM:"
-      delay_time = (60.0 / bpm) / 4 # 16th note delay
+      # delay_time = (60.0 / bpm) / 4 # 16th note delay
+      delay_time = 0.25
       loop do
         @song.transpose.each_with_index do |row, index|
           system "clear" 
@@ -82,18 +90,11 @@ module NesTracker
           @song.transpose.each_with_index do |full_row, full_index|
             puts "#{full_index == @current_position ? '>' : ' '} #{full_row.join(' ')}"
           end
-          sleep delay_time
           @current_position = (index + 1) % @song.transpose.size
 
-          if row[0] != "-"
-            noise.play
-          end
+          engine.process_row(row, "row_#{index}.wav", delay_time)
         end
       end
     end
-
-    private 
-
-    attr_reader :noise
   end
 end
