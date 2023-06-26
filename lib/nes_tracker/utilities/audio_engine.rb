@@ -1,6 +1,6 @@
 module NesTracker::Utilities
   class AudioEngine
-    REST  = "-"
+    REST  = "--"
     SAMPLE_RATE = 44100
     SECONDS = 0.25
     BUFFER_SIZE = 4096
