@@ -11,9 +11,10 @@ module NesTracker
   class Error < StandardError; end
 
   class Machine
+    SONG_LENGTH = 16
+
     def initialize
-      @song = Array.new(8) { Array.new(16, '-') }
-      @noise = NesTracker::SynthVoices::Noise.new
+      @song = Array.new(3) { Array.new(SONG_LENGTH, '--') }
       @engine = NesTracker::Utilities::AudioEngine.new
       run
     end
@@ -53,27 +54,28 @@ module NesTracker
       EOF
     end
 
-    def add_note(channel, note)
+    def add_note(channel, row, note)
       channel = channel.to_i
+      row = row.to_i
+      note = note.to_i
+
       if channel < 0 || channel >= @song.length
         puts "Invalid channel. Must be between 0 and #{@song.length - 1}"
         return
       end
 
-      free_slot = @song[channel].find_index('-')
-      if free_slot.nil?
-        puts "No free slots in channel #{channel}"
+      if row > SONG_LENGTH || row < 0
+        puts "#{row} is an invalid row"
         return
       end
 
-      @song[channel][free_slot] = note
-      puts "Added note #{note} to channel #{channel} at position #{free_slot}"
+      @song[channel][row] = note
+      puts "Added note #{note} to channel #{channel} at row #{row}"
     end
 
     def play_song(bpm = 120)
       bpm = bpm.to_f
       puts "Playing song at #{bpm} BPM:"
-      # delay_time = (60.0 / bpm) / 4 # 16th note delay
       delay_time = 0.25
       loop do
         @song.transpose.each_with_index do |row, index|
