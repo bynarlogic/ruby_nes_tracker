@@ -28,8 +28,6 @@ module NesTracker
         command, *args = input.split(' ')
 
         case command.downcase
-        when 'new'
-          new_song
         when 'note'
           add_note(*args)
         when 'play'
@@ -53,11 +51,6 @@ module NesTracker
       ( R | u | b | y ) ( N | E | S ) ( T | r | a | c | k | e | r )
        \_/ \_/ \_/ \_/   \_/ \_/ \_/   \_/ \_/ \_/ \_/ \_/ \_/ \_/
       EOF
-    end
-
-    def new_song
-      @song = Array.new(8) { Array.new(16, '-') }
-      puts "New song started"
     end
 
     def add_note(channel, note)
